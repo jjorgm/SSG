@@ -1,6 +1,7 @@
-from textnode import TextNode, TextType
+from shlex import split
 
 from extractmarkdown import extract_markdown_images, extract_markdown_links
+from textnode import TextNode, TextType
 
 
 def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
@@ -81,5 +82,18 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
 
             if remaining_text != "":
                 new_nodes.append(TextNode(remaining_text, TextType.TEXT))
+
+    return new_nodes
+
+def text_to_textnodes(text: str) -> list[TextNode]:
+    new_nodes = []
+    nodes = [TextNode(text, TextType.TEXT)]
+
+    bold_nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    italic_nodes = split_nodes_delimiter(bold_nodes, "_", TextType.ITALIC)
+    code_nodes = split_nodes_delimiter(italic_nodes, "`", TextType.CODE)
+    image_nodes = split_nodes_image(code_nodes)
+    link_nodes = split_nodes_link(image_nodes)
+    new_nodes.extend(link_nodes)
 
     return new_nodes
