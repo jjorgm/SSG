@@ -8,8 +8,8 @@ class TextType(Enum):
     BOLD = "bold text"
     ITALIC = "italic text"
     CODE = "code"
-    LINKS = "link"
-    IMAGES = "image"
+    LINK = "link"
+    IMAGE = "image"
 
 class TextNode:
     def __init__(self, text: str, text_type: str, url=None) -> None:
@@ -33,9 +33,9 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
             return LeafNode("i", text_node.text, None)
         case TextType.CODE:
             return LeafNode("code", text_node.text, None)
-        case TextType.LINKS:
+        case TextType.LINK:
             return LeafNode("a", text_node.text, {"href":text_node.url})
-        case TextType.IMAGES:
+        case TextType.IMAGE:
             return LeafNode("img", "", {"src":text_node.url, "alt":text_node.text})
         case _:
             raise ValueError("node is None")

@@ -10,13 +10,13 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(node, node2)
 
     def test_noteq(self):
-        node = TextNode("This is link node", TextType.LINKS, "www.somelink.com")
-        node2 = TextNode("This is an image node", TextType.IMAGES, "/imagefolder/someimage.png")
+        node = TextNode("This is link node", TextType.LINK, "www.somelink.com")
+        node2 = TextNode("This is an image node", TextType.IMAGE, "/imagefolder/someimage.png")
         self.assertNotEqual(node, node2)
 
     def test_url_empty(self):
-        node = TextNode("This url argument is empty", TextType.LINKS)
-        node2 = TextNode("This url arugment is not empty", TextType.LINKS, "www.somelink.com")
+        node = TextNode("This url argument is empty", TextType.LINK)
+        node2 = TextNode("This url arugment is not empty", TextType.LINK, "www.somelink.com")
         self.assertNotEqual(node, node2)
 
     def test_text(self):
@@ -44,14 +44,14 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.value, "This is a code text node")
 
     def test_links(self):
-        node = TextNode("anchor text", TextType.LINKS, "someurl")
+        node = TextNode("anchor text", TextType.LINK, "someurl")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "a")
         self.assertEqual(html_node.value, "anchor text")
         self.assertEqual(html_node.props, {"href":"someurl"})
 
     def test_images(self):
-        node = TextNode("alt text", TextType.IMAGES, "someurl")
+        node = TextNode("alt text", TextType.IMAGE, "someurl")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "img")
         self.assertEqual(html_node.value, "")
