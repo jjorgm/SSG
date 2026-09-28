@@ -1,5 +1,3 @@
-from shlex import split
-
 from extractmarkdown import extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 
