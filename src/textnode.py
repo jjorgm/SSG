@@ -1,5 +1,6 @@
 from enum import Enum
 
+from htmlnode import HTMLNode
 from leafnode import LeafNode
 
 
@@ -39,3 +40,17 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
             return LeafNode("img", "", {"src":text_node.url, "alt":text_node.text})
         case _:
             raise ValueError("node is None")
+
+def text_to_textnodes(text: str) -> list[TextNode]:
+    from splitnodes import split_nodes_delimiter, split_nodes_image, split_nodes_link
+    new_nodes = []
+    nodes = [TextNode(text, TextType.TEXT)]
+
+    bold_nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    italic_nodes = split_nodes_delimiter(bold_nodes, "_", TextType.ITALIC)
+    code_nodes = split_nodes_delimiter(italic_nodes, "`", TextType.CODE)
+    image_nodes = split_nodes_image(code_nodes)
+    link_nodes = split_nodes_link(image_nodes)
+    new_nodes.extend(link_nodes)
+
+    return new_nodes

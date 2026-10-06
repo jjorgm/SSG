@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType, text_node_to_html_node
+from textnode import TextNode, TextType, text_node_to_html_node, text_to_textnodes
 
 
 class TestTextNode(unittest.TestCase):
@@ -56,6 +56,25 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.tag, "img")
         self.assertEqual(html_node.value, "")
         self.assertEqual(html_node.props, {"src":"someurl", "alt":"alt text"})
+
+    def test_text_to_textnodes(self):
+        text = "This is **bold** and _italic_ and `code` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://www.boot.dev)"
+        new_nodes = text_to_textnodes(text)
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("bold", TextType.BOLD),
+                TextNode(" and ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" and ", TextType.TEXT),
+                TextNode("code", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://www.boot.dev"),
+             ],
+             new_nodes,
+         )
 
 if __name__ == "__main__":
     unittest.main()
