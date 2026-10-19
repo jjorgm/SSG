@@ -3,6 +3,7 @@ import unittest
 from extractmarkdown import (
     extract_markdown_images,
     extract_markdown_links,
+    extract_title,
 )
 
 
@@ -18,3 +19,13 @@ class TestExtractMarkdown(unittest.TestCase):
             "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         )
         self.assertListEqual([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")], matches)
+
+    def test_extract_title(self):
+        match = extract_title(
+            "# H1 Title"
+        )
+        self.assertEqual("H1 Title", match)
+
+    def test_non_title(self):
+        match = extract_title("## H2 Title")
+        self.assertNotEqual("H2 Title", match)
