@@ -20,3 +20,14 @@ def generate_page(from_path, template_path, dest_path):
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, mode='w') as html_file:
         html_file.write(full_html)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    content_paths = os.listdir(dir_path_content)
+    for content_path in content_paths:
+        content = os.path.join(dir_path_content, content_path)
+        if os.path.isfile(content):
+            html_page = os.path.join(dest_dir_path, "index.html")
+            generate_page(content, template_path, html_page)
+        else:
+            updated_dest_dir_path = os.path.join(dest_dir_path, content_path)
+            generate_pages_recursive(content, template_path, updated_dest_dir_path)
